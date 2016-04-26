@@ -1,0 +1,78 @@
+<html>
+	<head>
+	<title>
+		Kysymykset
+	</title>
+	<body>
+		{% include "navigation.html" %}
+		<input type="hidden" id="amount" value="{{amount}}">
+		<h2>Tarkastele kysymyksi&auml;</h2>
+		<p>kysely</p>
+		<form class="form" id="questionnaire" action='{% url "browse" %}' method="post">
+		{% csrf_token %}
+		<select id="questionnaire" name="questionnaire" onChange="switchQuestionnaire(this);">
+			<option value="empty">valitse kysely</option>
+		{% for questionnaire in list %}
+			<option value="{{questionnaire}}">{{questionnaire}}</option>
+		{% endfor %}
+		</select><br>
+		<p>kysymys</p>
+		<select id="question" name ="question" onChange="switchQuestion(this);">
+		</select>
+		<p>Uusi kuvaus</p>
+		<input type="text" name="new_description"> 
+		<p>tyyppi</p>
+		<input type="text" id="type" name="type" readonly="readonly"><br>
+		<input type="submit" name="submit" value="muokkaa kysymyst&auml;">
+		</from>
+		
+		<p id="messages">
+        	{% for message in messages %}
+            	{{ message }}
+        	{% endfor %}
+        </p>
+		<script type="text/javascript">
+			var questions = {{ questions|safe }};	
+			var options = [];
+			function switchQuestionnaire(select){			
+				for(option of options){
+					option.remove();
+				}		
+				options = [];
+				
+			    var x = document.getElementById("question");
+			    var index = select.selectedIndex;
+			    var select = document.getElementsByTagName("option")[index].value;
+			    for(question of questions){
+			    	
+			    	if(question.questionnaire == select){
+				    	var option = document.createElement("option");
+				    	option.text = question.description;
+				    	option.value = question.description;
+				    	x.add(option);
+				    	options.push(option);			    	
+			    	}		    	
+
+			    }	
+				switchQuestion(x)
+			}
+			
+			function switchQuestion(select){
+				var index = select.selectedIndex;
+				var select = document.getElementsByTagName("option")[index-(-document.getElementById("amount").value-1)].value;
+				for(question of questions){
+					if(question.description == select){
+						document.getElementById("type").value = question.type;
+						return;
+					}
+					
+				}
+				document.getElementById("type").value = "";
+				
+				
+			}						
+		</script>
+		
+		
+	</body>
+</html>

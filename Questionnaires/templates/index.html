@@ -1,0 +1,67 @@
+<html>
+	<head>
+	<title>
+		Etusivu
+	</title>
+	<body>
+		{% include "navigation.html" %}
+	 	<form class="form" id="questionnaire" action='{% url "index" %}' method="post">
+	        <h2>Uuden kyselyn luonti</h2>
+	        {% csrf_token %}
+			
+			<p>Otsikko</p>
+			<input type="text" name="title"><br>
+			<p>Kieli</p>
+			<input type="text" name="language"><br>
+			<p>Kuvaus</p>
+			<input type="text" name="description" size=100><br>			
+			
+			<button type="submit">Luo uusi kysely</button>
+		</form>
+
+		<p id="messages">
+        	{% for message in messages %}
+            	{{ message }}
+        	{% endfor %}
+        </p><br>
+		
+		<h2>Tarkastele kyselyit&auml;</h2>
+		<select id="questionnaire" onChange="switchQuestionnaire(this);">
+		<option value="empty">Valitse kysely</option>
+		{% for questionnaire in list %}
+			<option value="{{questionnaire}}">{{questionnaire}}</option>
+		{% endfor %}
+		</select>
+		
+		<p>Otsikko</p>
+		<input type="text" id="title" readonly="readonly"><br>
+		<p>Kieli</p>
+		<input type="text" id="language" readonly="readonly"><br>
+		<p>Kuvaus</p>
+		<input type="text" id="description" readonly="readonly" size=100><br>		
+		
+		<script type="text/javascript">
+        	var questionnaires = {{ questionnaires|safe }};	
+        	
+			function switchQuestionnaire(select){
+			    var index = select.selectedIndex;
+			    var select = document.getElementsByTagName("option")[index].value;
+			    
+			    if(select=="empty"){
+			    	document.getElementById("title").value = "";
+			    	document.getElementById("language").value = "";
+			    	document.getElementById("description").value = "";			    
+			    }
+			    
+			    for(questionnaire of questionnaires){
+			    	if(questionnaire.title == select){
+			    		document.getElementById("title").value = questionnaire.title;
+			    		document.getElementById("language").value = questionnaire.language;
+			    		document.getElementById("description").value = questionnaire.description;
+			    	}		    
+			    }	    
+        	}		     		
+							      		
+        </script>		
+	</body>
+</html>

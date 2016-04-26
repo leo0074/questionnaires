@@ -1,0 +1,52 @@
+<html>
+	<head>
+	<title>
+		Kysymykset
+	</title>
+	<body>
+		{% include "navigation.html" %}
+		<form class="form" id="questionnaire" action='{% url "question" %}' method="post">
+	        <h2>Uuden kysymyksen luonti</h2>
+	        {% csrf_token %}
+			
+
+			
+			<p>Kysely</p>		
+			<select name="questionnaire" id="questionnaire">
+				{% for questionnaire in list %}
+					<option value="{{questionnaire}}">{{questionnaire}}</option>
+				{% endfor %}
+			</select>		
+				
+			<p>Tyyppi</p>	
+			<select name="type" id="type" onChange="newtype();">
+				<option value="text">teksti</option>
+				<option value="yesno">kyll&auml;/ei</option>
+				<option id="slider" value="slider">slideri</option>
+			</select>	
+			<div id="range"></div>		
+						
+			<p>Kuvaus</p>
+			<input type="text" name="description" size=100><br>			
+			
+			<input type="submit" name="submit" value="Luo uusi kysymys">
+		</form>
+		
+		<p id="messages">
+        	{% for message in messages %}
+            	{{ message }}
+        	{% endfor %}
+        </p>
+		
+		<script type="text/javascript">		
+			function newtype(){
+				var additionals = "";
+				if(document.getElementById("slider").selected){				
+					additionals = "<p>minimi</p><input type='text' name='min' size=5><br>";
+					additionals += "<p>maksimi</p><input type='text' name='max' size=5><br>";										
+				}
+				document.getElementById("range").innerHTML = additionals;
+			}		
+		</script>			
+	</body>
+</html>

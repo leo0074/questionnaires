@@ -1,0 +1,67 @@
+<html>
+	<head>
+	<title>
+		Kysymykset
+	</title>
+	<body>
+		{% include "navigation.html" %}
+			
+	<form class="form" id="questionnaire" action='{% url "answer" %}' method="post">
+	{% csrf_token %}
+	<p>K&auml;ytt&auml;j&auml;n tunnisteluku</p>
+	<input type="text" name="uid"><br>
+	<select id="questionnaire" onChange="switchQuestionnaire(this);">
+		<option value="empty">Valitse kysely</option>
+		{% for questionnaire in list %}
+			<option value="{{questionnaire}}">{{questionnaire}}</option>
+		{% endfor %}
+	</select>
+	
+	<div id = "questions"></div>
+	
+	<input type="submit" name="submit" value="Vastaa kyselyyn">
+	</form>
+		
+	<p id="messages">
+        {% for message in messages %}
+        	{{ message }}
+    	{% endfor %}
+    </p>
+	
+	<script type="text/javascript">
+			var questions = {{ questions|safe }};
+			function switchQuestionnaire(select){
+				var index = select.selectedIndex;
+			    var select = document.getElementsByTagName("option")[index].value;
+				var form = "";
+				var sliderID = "s"
+				for(question of questions){
+					if(question.questionnaire == select){
+						form += "<p>"+question.description+"</p>";
+						if(question.type == "slider"){
+							form += question.min+"<input type='range' value="+question.min+" id='"+sliderID+"' min="+question.min+" max="+question.max+" onChange=sliders("+sliderID+") name='"+question.description+"'>"+question.max;
+							form += "<br><span id='"+sliderID+"s'>"+question.min+"</span>"
+							sliderID += "1";
+						}	
+						if(question.type == "text"){
+							form += "<input type='text' name='"+question.description+"'>";
+						}
+						if(question.type == "yesno"){
+							form += "<select name='"+question.description+"'><option value='yes'>kylla</option><option value='no'>ei</option></select>"
+						}
+										
+					}		
+				}
+				document.getElementById("questions").innerHTML = form;
+			}
+			
+			function sliders(sid){
+				var newValue = sid.value;
+				document.getElementById(sid.id+"s").innerHTML = newValue;
+			}
+			
+	</script>
+	
+	</body>
+	
+</html>

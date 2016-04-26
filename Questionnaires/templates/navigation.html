@@ -1,0 +1,45 @@
+<html>
+<head>
+<style>
+    ul {
+        list-style-type: none;
+        margin: 0;
+        padding: 0;
+        overflow: hidden;
+        background-color: #333;
+        position: fixed;
+        top: 0;
+        width: 100%;
+    }
+    li {
+        float: left;
+    }
+    li a {
+        display: block;
+        color: white;
+        text-align: center;
+        padding: 14px 16px;
+        text-decoration: none;
+        border-right: 1px solid #bbb;
+    }
+    /* Change the link color to #111 (black) on hover */
+    li a:hover {
+        background-color: #111;
+    }
+    li a:active {
+        background-color: #4CAF50;
+    }
+</style>
+</head>
+<body>
+<ul>
+    <li><a href='{% url "index" %}'><span>Kyselyt</span></a></li>
+    <li><a href='{% url "question" %}'><span>Uusi kysymys</span></a></li>
+    <li><a href='{% url "browse" %}'><span>Tarkastele kysymksi&auml;</span></a></li>
+    <li><a href='{% url "answer" %}'><span>Vastaa kyselyyn</span></a></li>
+    
+</ul>
+<br>
+<br>
+</body>
+</html>
