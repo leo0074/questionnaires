@@ -13,6 +13,7 @@ class Question(models.Model):
     questionnaire = models.ForeignKey('Questionnaire', on_delete=models.CASCADE)
     description = models.CharField(max_length=1000)    
 
+#Storage for old versions of Questions
 class Old_questions(models.Model):
     question = models.ForeignKey('Question', on_delete=models.CASCADE)
     version = models.IntegerField()

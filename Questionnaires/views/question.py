@@ -47,7 +47,8 @@ def browse(request):
             messages.add_message(request, messages.ERROR, "Valitse muokattava kysymys!")
         elif data["new_description"] == "":
             messages.add_message(request, messages.ERROR, "Anna uusi kuvaus!")            
-        else:    
+        else:  
+            #Creates old_question with data of current one then updates the question  
             question = Question.objects.filter(questionnaire=Questionnaire.objects.filter(title=data["questionnaire"]), description=data["question"])[0]
             old = Old_questions.objects.create(question=question, version=question.current_version, type=question.type, min=question.min, max=question.max, description=question.description)
             old.save()

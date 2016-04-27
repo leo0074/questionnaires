@@ -34,6 +34,8 @@
 		<script type="text/javascript">
 			var questions = {{ questions|safe }};	
 			var options = [];
+			
+			//Changes current quesionnaire in view
 			function switchQuestionnaire(select){			
 				for(option of options){
 					option.remove();
@@ -57,6 +59,7 @@
 				switchQuestion(x)
 			}
 			
+			//Changes current quesion in view
 			function switchQuestion(select){
 				var index = select.selectedIndex;
 				var select = document.getElementsByTagName("option")[index-(-document.getElementById("amount").value-1)].value;
